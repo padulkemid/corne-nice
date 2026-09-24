@@ -1,3 +1,6 @@
+this came from EMJE tech so yeayea shut your beach ahh up bro.
+---
+
 ZMK Corne untuk Super Mini / Promicro Wireless NRF52840.
 
 [ZMK STUDIO](https://zmk.studio/)
