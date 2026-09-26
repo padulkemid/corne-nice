@@ -5,7 +5,6 @@
  */
 
 #include <behaviors.dtsi>
-#include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 
 /* ---------------------------------------------------------------------------
@@ -24,7 +23,7 @@
 #define SEND_TO_SPACE_2  &kp RS(RG(N2))     // rshift+rcmd+2  window --space 2; space --focus 2
 #define SEND_TO_SPACE_3  &kp RS(RG(N3))     // rshift+rcmd+3  window --space 3; space --focus 3
 #define BALANCE_SPACE    &kp RS(RG(N0))     // rshift+rcmd+0  space --balance
-#define SCREENSHOT       &kp RS(RG(N5))     // cmd+shift+5    screenshot toolbar (raise layer, pos 16)
+#define SCREENSHOT       &kp RS(RG(N5))     // cmd+shift+5    screenshot toolbar (L2 + F)
 
 /* Browser tab chords. These are LG / LS (LEFT cmd / shift) - the Karabiner
    caps_lock -> left_command rule is what supplies the cmd, and skhd is not
@@ -59,64 +58,71 @@
    active layer and ends at the base layer. So a cell left as &trans on L1/L2
    still types its base key while the layer is held. */
 
+/* No Bluetooth keys anywhere. The keyboard talks to one host (the Mac), so
+   BT_SEL / BT_DISC / BT_CLR earned their cells back. Recovery after a host
+   forget is settings_reset.uf2 + reflash both halves + re-pair. There is no
+   in-keyboard way to clear a profile anymore - that is the trade. */
+
 / {
     keymap {
         compatible = "zmk,keymap";
 
         default_layer {
-            //   0      1      2      3      4      5         6      7      8      9     10     11
-            // | TAB  |  Q   |  W   |  E   |  R   |  T   |   |  Y   |  U   |  I   |  O   |  P   | BKSP |
-            //  12     13     14     15     16     17        18     19     20     21     22     23
-            // | CAPS |  A   |  S   |  D   |  F   |  G   |   |  H   |  J   |  K   |  L   |  ;   | '/RET|
-            //  24     25     26     27     28     29        30     31     32     33     34     35
-            // | SHFT |  Z   |  X   |  C   |  V   |  B   |   |  N   |  M   |  ,   |  .   |  /   | RSFT |
-            //     36     37     38        39     40     41
-            // |  L2  | LALT | SPC  |   | SPC  | RALT |  L1  |
+            // | TAB  |  Q  |  W  |  E  |  R  |  T  |   |  Y  |  U  |  I  |  O  |  P  | BKSP |
+            // | CAPS |  A  |  S  |  D  |  F  |  G  |   |  H  |  J  |  K  |  L  |  ;  | '/RET|
+            // | SHFT |  Z  |  X  |  C  |  V  |  B  |   |  N  |  M  |  ,  |  .  |  /  | RSFT |
+            // |  L2  | LALT| SPC |   | SPC | RALT|  L1  |
 
             bindings = <
-&kp TAB    &kp Q  &kp W  &kp E     &kp R  &kp T        &kp Y    &kp U  &kp I      &kp O    &kp P     &kp BSPC
-&kp CAPS   &kp A  &kp S  &kp D     &kp F  &kp G        &kp H    &kp J  &kp K      &kp L    &kp SEMI  &mt RET SQT
-&kp LSHFT  &kp Z  &kp X  &kp C     &kp V  &kp B        &kp N    &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp RSHIFT
-                         &mo 2      &kp LALT  &kp SPACE   &kp SPACE  &kp RALT  &mo 1
+&kp TAB    &kp Q  &kp W  &kp E  &kp R  &kp T        &kp Y  &kp U  &kp I      &kp O    &kp P     &kp BSPC
+&kp CAPS   &kp A  &kp S  &kp D  &kp F  &kp G        &kp H  &kp J  &kp K      &kp L    &kp SEMI  &mt RET SQT
+&kp LSHFT  &kp Z  &kp X  &kp C  &kp V  &kp B        &kp N  &kp M  &kp COMMA  &kp DOT  &kp FSLH  &kp RSHIFT
+                           &mo 2  &kp LALT  &kp SPACE    &kp SPACE  &kp RALT  &mo 1
             >;
         };
 
         lower_layer {
-            //   0      1      2      3      4      5         6      7      8      9     10     11
-            // |  `   |  1   |  2   |  3   |  4   |  5   |   |  6   |  7   |  8   |  9   |  0   |  ⌘BKSP|
-            //  12     13     14     15     16     17        18     19     20     21     22     23
-            // |  --  | BT1  | BT2  | CLR  | zoom | ⌥⌘9  |   |  ←   |  ↓   |  ↑   |  →   |  --  |  RET  |
-            //  24     25     26     27     28     29        30     31     32     33     34     35
-            // |  --  | ⌥⌘1  | ⌥⌘2  | ⌥⌘3  | ⌥⌘-  | ⌥⌘8  |   | ⇧⌘1  | ⇧⌘2  | ⇧⌘3  | ⇧⌘0  |  --  |  --   |
-            //     36     37     38        39     40     41
-            // | tab← | tab→ | ESC  |   | ESC  |  --  |  --  |
+            // Numbers, remote control, yabai. Held by the RIGHT thumb; the left
+            // hand does the typing. Left half never had a BT key worth keeping.
             //
-            // BT slots: the OLED is 1-based, so slot 0 shows "1" and slot 1 shows "2".
-            // A slot cannot be overwritten - select the slot, press CLR, then pair from the host.
+            // | TAB  |  Q   |  W   |  E   |  R   |  T   |   |  Y   |  U   |  I   |  O   |  P   | BKSP |
+            // |  `   |  1   |  2   |  3   |  4   |  5   |   |  6   |  7   |  8   |  9   |  0   |  ⌘BKSP|
+            // | CAPS |  A   |  S   |  D   |  F   |  G   |   |  H   |  J   |  K   |  L   |  ;   |  '/RET|
+            // |  --  |  ⌘\  |  --  |  --  | zoom | ⌥⌘9  |   |  ←   |  ↓   |  ↑   |  →   |  --  |  RET  |
+            // | SHFT |  Z   |  X   |  C   |  V   |  B   |   |  N   |  M   |  ,   |  .   |  /   | RSFT |
+            // |  --  | ⌥⌘1  | ⌥⌘2  | ⌥⌘3  | ⌥⌘-  | ⌥⌘8  |   | ⇧⌘1  | ⇧⌘2  | ⇧⌘3  | ⇧⌘0  |  --  |  --   |
+            // |  L2  | LALT | SPC  |   | SPC  | RALT |  L1  |
+            // | tab← | tab→ | ESC  |   | ESC  |  --  |  --  |
 
             bindings = <
-&kp GRAVE       &kp N1         &kp N2         &kp N3         &kp N4         &kp N5          &kp N6          &kp N7          &kp N8          &kp N9         &kp N0         &kp RG(BSPC)
-&trans          &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_CLR     ZOOM_FULLSCREEN RESIZE_UP      &kp LEFT        &kp DOWN        &kp UP          &kp RIGHT      &trans         &kp RET
-&trans          SPACE_FOCUS_1  SPACE_FOCUS_2  SPACE_FOCUS_3  TOGGLE_SPLIT   RESIZE_DOWN     SEND_TO_SPACE_1 SEND_TO_SPACE_2 SEND_TO_SPACE_3 BALANCE_SPACE  &trans         &trans
-                               TAB_PREV       TAB_NEXT       &kp ESC        &kp ESC         &trans          &trans
+&kp GRAVE  &kp N1        &kp N2  &kp N3  &kp N4  &kp N5            &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &kp RG(BSPC)
+&trans     &kp LG(BSLH)  &trans  &trans  ZOOM_FULLSCREEN  RESIZE_UP  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT  &trans  &kp RET
+&trans     SPACE_FOCUS_1 SPACE_FOCUS_2  SPACE_FOCUS_3  TOGGLE_SPLIT  RESIZE_DOWN  SEND_TO_SPACE_1  SEND_TO_SPACE_2  SEND_TO_SPACE_3  BALANCE_SPACE  &trans  &trans
+                                 TAB_PREV  TAB_NEXT  &kp ESC    &kp ESC  &trans  &trans
             >;
         };
 
         raise_layer {
-            //   0      1      2      3      4      5         6      7      8      9     10     11
-            // |  --  |  !   |  @   |  #   |  $   |  %   |   |  ^   |  &   |  *   |  (   |  )   |  ⌥BKSP|
-            //  12     13     14     15     16     17        18     19     20     21     22     23
-            // |  --  |DIS0  |DIS1  |  --  | ⌘⇧5  | VOL+ |   |  -   |  =   |  [   |  ]   |  \   |  RET  |
-            //  24     25     26     27     28     29        30     31     32     33     34     35
-            // |  --  |  --  |  --  |  --  |  --  | VOL- |   |  _   |  +   |  {   |  }   |  |   |  ~    |
-            //     36     37     38        39     40     41
-            // |  --  |  --  | ESC  |   | ESC  | mv→  | mv←  |
+            // Symbols, punctuation, media. Held by the LEFT thumb; the right
+            // hand does the typing. Every shifted glyph has a literal cell here,
+            // so Shift is only needed for capitals and selection.
+            // Implicit-modifier keycodes (LT, GT, QUESTION, DQT, PIPE, TILDE,
+            // COLON) carry their own shift internally - no physical Shift key.
+            //
+            // | TAB  |  Q   |  W   |  E   |  R   |  T   |   |  Y   |  U   |  I   |  O   |  P   | BKSP |
+            // |  ~   |  !   |  @   |  #   |  $   |  %   |   |  ^   |  &   |  *   |  (   |  )   | ⌥BKSP|
+            // | CAPS |  A   |  S   |  D   |  F   |  G   |   |  H   |  J   |  K   |  L   |  ;   |  '/RET|
+            // |  --  |  |   |  "   |  :   | ⌘⇧5  | VOL+ |   |  -   |  =   |  [   |  ]   |  \   |  RET  |
+            // | SHFT |  Z   |  X   |  C   |  V   |  B   |   |  N   |  M   |  ,   |  .   |  /   | RSFT |
+            // |  --  |  --  |  <   |  >   |  --  | VOL- |   |  _   |  +   |  {   |  }   |  ?   |  --   |
+            // |  L2  | LALT | SPC  |   | SPC  | RALT |  L1  |
+            // |  --  |  --  | ESC  |   | ESC  | mv←  | mv→  |
 
             bindings = <
-&trans     &kp EXCL  &kp AT     &kp HASH  &kp DLLR  &kp PRCNT       &kp CARET  &kp AMPS  &kp KP_MULTIPLY  &kp LPAR  &kp RPAR  &kp LA(BSPC)
-&trans     &bt BT_DISC 0  &bt BT_DISC 1  &trans  SCREENSHOT  &kp C_VOL_UP  &kp MINUS  &kp EQUAL  &kp LBKT        &kp RBKT  &kp BSLH  &kp RET
-&trans     &trans    &trans     &trans    &trans    &kp C_VOL_DN    &kp UNDER  &kp PLUS  &kp LBRC         &kp RBRC  &kp PIPE  &kp TILDE
-                              &trans         &trans         &kp ESC        &kp ESC        TAB_MOVE_LEFT TAB_MOVE_RIGHT
+&kp TILDE  &kp EXCL  &kp AT    &kp HASH   &kp DLLR  &kp PRCNT      &kp CARET  &kp AMPS   &kp KP_MULTIPLY  &kp LPAR   &kp RPAR      &kp LA(BSPC)
+&trans     &kp PIPE  &kp DQT   &kp COLON  SCREENSHOT  &kp C_VOL_UP   &kp MINUS  &kp EQUAL  &kp LBKT         &kp RBKT   &kp BSLH      &kp RET
+&trans     &trans    &kp LT    &kp GT     &trans    &kp C_VOL_DN   &kp UNDER  &kp PLUS   &kp LBRC         &kp RBRC   &kp QUESTION  &trans
+                                    &trans  &trans  &kp ESC        &kp ESC  TAB_MOVE_LEFT  TAB_MOVE_RIGHT
             >;
         };
     };
