@@ -86,7 +86,7 @@
             // hand does the typing. Left half never had a BT key worth keeping.
             //
             // | TAB  |  Q   |  W   |  E   |  R   |  T   |   |  Y   |  U   |  I   |  O   |  P   | BKSP |
-            // |  `   |  1   |  2   |  3   |  4   |  5   |   |  6   |  7   |  8   |  9   |  0   |  ⌘BKSP|
+            // |  `   |  1   |  2   |  3   |  4   |  5   |   |  6   |  7   |  8   |  9   |  0   |  BKSP|
             // | CAPS |  A   |  S   |  D   |  F   |  G   |   |  H   |  J   |  K   |  L   |  ;   |  '/RET|
             // |  --  |  ⌘\  |  --  |  --  | zoom | ⌥⌘9  |   |  ←   |  ↓   |  ↑   |  →   |  --  |  RET  |
             // | SHFT |  Z   |  X   |  C   |  V   |  B   |   |  N   |  M   |  ,   |  .   |  /   | RSFT |
@@ -95,7 +95,7 @@
             // | tab← | tab→ | ESC  |   | ESC  |  --  |  --  |
 
             bindings = <
-&kp GRAVE  &kp N1        &kp N2  &kp N3  &kp N4  &kp N5            &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &kp RG(BSPC)
+&kp GRAVE  &kp N1        &kp N2  &kp N3  &kp N4  &kp N5            &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &trans
 &trans     &kp LG(BSLH)  &trans  &trans  ZOOM_FULLSCREEN  RESIZE_UP  &kp LEFT  &kp DOWN  &kp UP  &kp RIGHT  &trans  &kp RET
 &trans     SPACE_FOCUS_1 SPACE_FOCUS_2  SPACE_FOCUS_3  TOGGLE_SPLIT  RESIZE_DOWN  SEND_TO_SPACE_1  SEND_TO_SPACE_2  SEND_TO_SPACE_3  BALANCE_SPACE  &trans  &trans
                                  TAB_PREV  TAB_NEXT  &kp ESC    &kp ESC  &trans  &trans
